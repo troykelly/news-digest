@@ -1,0 +1,47 @@
+{
+  "$schema": "../schemas/settings.schema.json",
+  "freshrss": {
+    "baseUrl": "https://your-freshrss-instance.example.com/api/greader.php",
+    "credentials": {
+      "op": "op://YourVault/FreshRSS/item-id",
+      "usernameField": "username",
+      "passwordField": "api password"
+    }
+  },
+  "postmark": {
+    "from": "news@yourdomain.com",
+    "replyTo": "news@yourdomain.com",
+    "tokenOp": "op://YourVault/Postmark/credential"
+  },
+  "breaking": {
+    "enabled": true,
+    "maxPerDay": 2,
+    "quietHours": {
+      "start": 22,
+      "end": 7
+    },
+    "urgencyThreshold": 0.85,
+    "criticalOverrideThreshold": 0.95
+  },
+  "clustering": {
+    "similarityThreshold": 0.75,
+    "minSourcesForTrending": 2,
+    "clusterWindowHours": 24,
+    "staleAfterHours": 48
+  },
+  "embeddings": {
+    "provider": "voyage",
+    "model": "voyage-4-lite",
+    "op": "op://YourVault/VoyageAI/key"
+  },
+  "llm": {
+    "model": "anthropic/claude-sonnet-4-20250514",
+    "maxTokensFeature": 1500,
+    "maxTokensKey": 500,
+    "maxTokensBreaking": 800
+  },
+  "digest": {
+    "brandName": "YourBrand",
+    "tagline": "Your daily intelligence briefing"
+  }
+}

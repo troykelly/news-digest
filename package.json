@@ -1,0 +1,40 @@
+{
+  "name": "news-digest",
+  "version": "0.1.0",
+  "description": "Personal news digest with editorial voice, story clustering, and breaking alerts",
+  "type": "module",
+  "bin": {
+    "news-digest": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src/",
+    "test": "vitest",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push"
+  },
+  "dependencies": {
+    "@lancedb/lancedb": "^0.23.0",
+    "@prisma/client": "^6.0.0",
+    "apache-arrow": "^18.1.0",
+    "cheerio": "^1.0.0",
+    "commander": "^12.0.0",
+    "date-fns": "^4.0.0",
+    "date-fns-tz": "^3.0.0",
+    "handlebars": "^4.7.8",
+    "natural": "^8.0.0",
+    "node-fetch": "^3.3.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "eslint": "^9.0.0",
+    "prisma": "^6.0.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

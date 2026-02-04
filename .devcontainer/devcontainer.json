@@ -1,0 +1,23 @@
+{
+  "name": "news-digest",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:22",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "prisma.prisma"
+      ]
+    }
+  },
+  "postCreateCommand": "pnpm install && pnpm db:push",
+  "remoteEnv": {
+    "DATABASE_URL": "file:./data/state.sqlite"
+  },
+  "mounts": [
+    "source=${localEnv:HOME}/.op_service_account_token,target=/home/node/.op_service_account_token,type=bind,readonly"
+  ]
+}

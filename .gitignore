@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# User config (contains PII)
+config/users/*.json
+!config/users/*.example.json
+config/settings.json
+
+# Vector store data
+data/vectors/
+
+# Build output
+dist/
+
+# Database
+data/*.sqlite
+data/*.sqlite-journal
+*.sqlite
+*.sqlite-journal
+
+# Environment
+.env
+.env.local
+
+# Prisma
+prisma/migrations/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test coverage
+coverage/

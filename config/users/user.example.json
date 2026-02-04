@@ -1,0 +1,43 @@
+{
+  "$schema": "../../schemas/user.schema.json",
+  "email": "user@example.com",
+  "schedule": {
+    "morning": 5,
+    "evening": 17,
+    "timezone": "Australia/Sydney"
+  },
+  "topics": {
+    "exclude": [
+      "sport",
+      "celebrity",
+      "gossip"
+    ],
+    "boost": [
+      "tech",
+      "ai",
+      "politics",
+      "science"
+    ],
+    "boostAustralia": true,
+    "boostNSW": false
+  },
+  "breaking": {
+    "enabled": true,
+    "categories": [
+      "world-major",
+      "politics-major",
+      "australia"
+    ]
+  },
+  "editorial": {
+    "lens": "Your preferred editorial perspective and worldview.",
+    "tone": "Your preferred writing style and tone.",
+    "signoff": "Your newsletter signoff."
+  },
+  "newsletter": {
+    "featureCount": 1,
+    "keyStoriesCount": 5,
+    "quickfireCount": 8,
+    "includeSourceCounts": true
+  }
+}

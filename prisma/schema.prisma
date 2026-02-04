@@ -1,0 +1,151 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Articles fetched from RSS feeds
+model Article {
+  id           String   @id @default(cuid())
+  url          String   @unique
+  title        String
+  summary      String?
+  content      String?
+  author       String?
+  source       String   // Feed/publication name
+  sourceUrl    String?  // Original feed URL
+  publishedAt  DateTime
+  fetchedAt    DateTime @default(now())
+  imageUrl     String?
+  
+  // Clustering
+  clusterId    String?
+  cluster      Cluster? @relation(fields: [clusterId], references: [id])
+  
+  // Scoring
+  baseScore    Float    @default(0)
+  urgencyScore Float    @default(0)
+  
+  // Entities extracted
+  entities     String?  // JSON: {people: [], orgs: [], locations: []}
+  
+  @@index([publishedAt])
+  @@index([clusterId])
+  @@index([source])
+}
+
+// Story clusters (related articles about the same topic)
+model Cluster {
+  id           String    @id @default(cuid())
+  label        String    // Auto-generated label for the cluster
+  keywords     String?   // JSON array of key terms
+  
+  firstSeen    DateTime  @default(now())
+  lastUpdated  DateTime  @default(now())
+  
+  sourceCount  Int       @default(1)  // Number of unique sources
+  articleCount Int       @default(1)
+  
+  peakVelocity Float     @default(0)  // Articles per hour at peak
+  
+  status       ClusterStatus @default(ACTIVE)
+  
+  articles     Article[]
+  userCurations UserCuration[]
+  breakingAlerts BreakingAlert[]
+  
+  @@index([status])
+  @@index([lastUpdated])
+}
+
+enum ClusterStatus {
+  ACTIVE    // Still receiving articles
+  SENT      // Featured in a newsletter
+  STALE     // No updates in 48h+
+}
+
+// Per-user curation state for each cluster
+model UserCuration {
+  id        String   @id @default(cuid())
+  
+  user      String   // Username (maps to config file)
+  clusterId String
+  cluster   Cluster  @relation(fields: [clusterId], references: [id])
+  
+  status    CurationStatus @default(PENDING)
+  slot      DigestSlot?    // Where it appeared in digest
+  edition   Edition?       // Which edition it was sent in
+  
+  score     Float    @default(0)  // User-specific score (with their boosts)
+  
+  sentAt    DateTime?
+  
+  @@unique([user, clusterId])
+  @@index([user, status])
+}
+
+enum CurationStatus {
+  PENDING   // Waiting to be included
+  SELECTED  // Selected for next newsletter
+  SENT      // Already sent to user
+  SKIPPED   // Explicitly skipped (old, low relevance)
+}
+
+enum DigestSlot {
+  FEATURE
+  KEY
+  QUICK
+}
+
+enum Edition {
+  MORNING
+  EVENING
+  BREAKING
+}
+
+// Breaking alerts sent
+model BreakingAlert {
+  id        String   @id @default(cuid())
+  
+  user      String
+  clusterId String
+  cluster   Cluster  @relation(fields: [clusterId], references: [id])
+  
+  sentAt    DateTime @default(now())
+  
+  // Snapshot of what was sent
+  headline  String
+  analysis  String
+  articleIds String  // JSON array of article IDs included
+  
+  @@index([user, sentAt])
+}
+
+// URL deduplication (prevent re-fetching)
+model SeenUrl {
+  url       String   @id
+  firstSeen DateTime @default(now())
+}
+
+// Send history for rate limiting and debugging
+model SendLog {
+  id        String   @id @default(cuid())
+  
+  user      String
+  edition   Edition
+  sentAt    DateTime @default(now())
+  
+  success   Boolean
+  messageId String?  // Postmark message ID
+  error     String?
+  
+  // Stats
+  featureClusterId String?
+  keyClusterIds    String?  // JSON array
+  quickClusterIds  String?  // JSON array
+  
+  @@index([user, sentAt])
+}

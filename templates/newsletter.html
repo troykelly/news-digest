@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>{{brandName}} {{edition}} Briefing</title>
+  <style>
+    /* Reset */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    /* Base */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #ffffff;
+      padding: 0;
+      margin: 0;
+    }
+    
+    /* Dark mode */
+    @media (prefers-color-scheme: dark) {
+      body { background: #0d0d0d; color: #e5e5e5; }
+      .container { background: #1a1a1a; }
+      .header { background: linear-gradient(135deg, #1e3a5f 0%, #0d1f33 100%); }
+      .section-title { color: #a0c4e8; border-bottom-color: #2a4a6a; }
+      .feature-card { background: #252525; }
+      .key-story { border-bottom-color: #333; }
+      .quick-item { background: #252525; }
+      .quick-item:hover { background: #333; }
+      a { color: #6db3f2; }
+      .source-badge { background: #2a4a6a; color: #a0c4e8; }
+      .footer { background: #111; color: #888; }
+    }
+    
+    /* Container */
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      background: #fff;
+    }
+    
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #1e3a5f 0%, #0a1929 100%);
+      color: #fff;
+      padding: 32px 24px;
+      text-align: center;
+    }
+    
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    
+    .header .edition {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      opacity: 0.8;
+    }
+    
+    .header .date {
+      font-size: 14px;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+    
+    /* Content */
+    .content {
+      padding: 24px;
+    }
+    
+    /* Section titles */
+    .section-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #1e3a5f;
+      border-bottom: 2px solid #1e3a5f;
+      padding-bottom: 8px;
+      margin: 32px 0 20px;
+    }
+    
+    .section-title:first-child {
+      margin-top: 0;
+    }
+    
+    /* Feature story */
+    .feature-card {
+      background: #f8f9fa;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    
+    .feature-image {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      display: block;
+    }
+    
+    .feature-content {
+      padding: 24px;
+    }
+    
+    .feature-content h2 {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+    
+    .feature-content h2 a {
+      color: inherit;
+      text-decoration: none;
+    }
+    
+    .feature-content h2 a:hover {
+      text-decoration: underline;
+    }
+    
+    .feature-meta {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    
+    .source-badge {
+      display: inline-block;
+      background: #e8f0f8;
+      color: #1e3a5f;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .source-count {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .feature-analysis {
+      font-size: 16px;
+      line-height: 1.7;
+    }
+    
+    .feature-analysis p {
+      margin-bottom: 16px;
+    }
+    
+    .feature-analysis p:last-child {
+      margin-bottom: 0;
+    }
+    
+    /* Key stories */
+    .key-story {
+      padding: 20px 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .key-story:last-child {
+      border-bottom: none;
+    }
+    
+    .key-story h3 {
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+    
+    .key-story h3 a {
+      color: inherit;
+      text-decoration: none;
+    }
+    
+    .key-story h3 a:hover {
+      text-decoration: underline;
+    }
+    
+    .key-story .summary {
+      font-size: 15px;
+      color: #444;
+      margin-bottom: 8px;
+    }
+    
+    .key-story-image {
+      float: right;
+      width: 120px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-left: 16px;
+      margin-bottom: 8px;
+    }
+    
+    @media (max-width: 480px) {
+      .key-story-image {
+        float: none;
+        width: 100%;
+        height: 160px;
+        margin: 0 0 12px;
+      }
+    }
+    
+    /* Quick-fire */
+    .quick-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .quick-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+    }
+    
+    .quick-item:hover {
+      background: #eef2f6;
+    }
+    
+    .quick-bullet {
+      flex-shrink: 0;
+      width: 6px;
+      height: 6px;
+      background: #1e3a5f;
+      border-radius: 50%;
+      margin-top: 8px;
+    }
+    
+    .quick-text {
+      flex: 1;
+    }
+    
+    .quick-title {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 2px;
+    }
+    
+    .quick-source {
+      font-size: 11px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Footer */
+    .footer {
+      background: #f8f9fa;
+      padding: 24px;
+      text-align: center;
+      font-size: 13px;
+      color: #666;
+    }
+    
+    .footer .signoff {
+      font-style: italic;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+    
+    .footer a {
+      color: #1e3a5f;
+    }
+    
+    .footer .brand {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 680px) {
+      .header { padding: 24px 16px; }
+      .header h1 { font-size: 24px; }
+      .content { padding: 16px; }
+      .feature-content { padding: 16px; }
+      .feature-content h2 { font-size: 20px; }
+      .feature-image { height: 180px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>{{brandName}}</h1>
+      <div class="edition">{{edition}} Briefing</div>
+      <div class="date">{{formattedDate}}</div>
+    </div>
+    
+    <div class="content">
+      {{#if feature}}
+      <!-- Feature Story -->
+      <div class="section-title">Today's Lead</div>
+      <div class="feature-card">
+        {{#if feature.imageUrl}}
+        <img src="{{feature.imageUrl}}" alt="" class="feature-image" loading="lazy">
+        {{/if}}
+        <div class="feature-content">
+          <h2><a href="{{feature.url}}">{{feature.title}}</a></h2>
+          <div class="feature-meta">
+            <span class="source-badge">{{feature.source}}</span>
+            {{#if feature.sourceCount}}
+            <span class="source-count">+{{feature.sourceCount}} sources</span>
+            {{/if}}
+          </div>
+          <div class="feature-analysis">
+            {{{feature.analysis}}}
+          </div>
+        </div>
+      </div>
+      {{/if}}
+      
+      {{#if keyStories.length}}
+      <!-- Key Stories -->
+      <div class="section-title">Key Stories</div>
+      {{#each keyStories}}
+      <div class="key-story">
+        {{#if this.imageUrl}}
+        <img src="{{this.imageUrl}}" alt="" class="key-story-image" loading="lazy">
+        {{/if}}
+        <h3><a href="{{this.url}}">{{this.title}}</a></h3>
+        <div class="summary">{{{this.summary}}}</div>
+        <span class="source-badge">{{this.source}}</span>
+      </div>
+      {{/each}}
+      {{/if}}
+      
+      {{#if quickfire.length}}
+      <!-- Quick-fire -->
+      <div class="section-title">Quick Hits</div>
+      <div class="quick-list">
+        {{#each quickfire}}
+        <a href="{{this.url}}" class="quick-item">
+          <div class="quick-bullet"></div>
+          <div class="quick-text">
+            <div class="quick-title">{{this.title}}</div>
+            <div class="quick-source">{{this.source}}</div>
+          </div>
+        </a>
+        {{/each}}
+      </div>
+      {{/if}}
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+      <div class="signoff">{{signoff}}</div>
+      <div class="brand">{{brandName}}</div>
+      <p>
+        <a href="mailto:{{replyTo}}?subject=Preferences">Update preferences</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>
